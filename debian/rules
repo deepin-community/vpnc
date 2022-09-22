@@ -1,0 +1,30 @@
+#!/usr/bin/make -f
+
+include /usr/share/dpkg/pkg-info.mk
+include /usr/share/dpkg/architecture.mk
+ifeq ($(origin CC),default)
+CC = $(DEB_HOST_GNU_TYPE)-gcc
+endif
+export CC
+export PKG_CONFIG=$(DEB_HOST_GNU_TYPE)-pkg-config
+ifneq ($(filter cross,$(DEB_BUILD_PROFILES)),)
+export VPNC = /usr/sbin/vpnc
+endif
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	dh_auto_build -- SCRIPT_PATH=/usr/share/vpnc-scripts/vpnc-script VERSION=$(DEB_VERSION)
+
+override_dh_auto_install:
+	touch install-doc
+	dh_auto_install -- PREFIX=/usr SYSTEMDDIR=/lib/systemd/system install
+	rm -rf ./debian/vpnc/usr/share/licenses
+
+override_dh_fixperms:
+	dh_fixperms
+	chmod 700 ./debian/vpnc/etc/vpnc
+	chmod 600 ./debian/vpnc/etc/vpnc/default.conf

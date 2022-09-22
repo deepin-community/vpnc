@@ -1,0 +1,30 @@
+Source: vpnc
+Section: net
+Priority: optional
+Maintainer: Florian Schlichting <fsfs@debian.org>
+Build-Depends: debhelper-compat (= 13),
+ libgcrypt20-dev,
+ libgnutls28-dev,
+ pkg-config,
+ vpnc:native <cross>
+Standards-Version: 4.5.1
+Vcs-Browser: https://salsa.debian.org/debian/vpnc
+Vcs-Git: https://salsa.debian.org/debian/vpnc.git
+Homepage: https://github.com/streambinder/vpnc
+Rules-Requires-Root: no
+
+Package: vpnc
+Architecture: any
+Suggests: resolvconf
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${perl:Depends},
+ vpnc-scripts
+Recommends: iproute2
+Description: Cisco-compatible VPN client
+ vpnc is a VPN client compatible with cisco3000 VPN Concentrator (also
+ known as Cisco's EasyVPN equipment). vpnc runs entirely in userspace
+ and does not require kernel modules except for the tun driver to
+ communicate with the network layer.
+ .
+ It supports most of the features needed to establish connection to the
+ VPN concentrator: MD5 and SHA1 hashes, 3DES and AES ciphers, PFS and
+ various IKE DH group settings.
